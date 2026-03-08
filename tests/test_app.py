@@ -1,10 +1,13 @@
-import os
-import tempfile
-import importlib
+import sys
+from pathlib import Path
+
+# 把项目根目录加到 Python 路径里
+sys.path.append(str(Path(__file__).resolve().parents[1]))
+
+import app
+
 
 def test_app_writes_file(tmp_path):
- 
-    import app
     app.USERNAME = "testuser"
     app.DATA_DIR = str(tmp_path)
 
