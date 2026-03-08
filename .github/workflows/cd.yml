@@ -18,6 +18,22 @@ jobs:
         run: |
           docker build -t assignment4 .
 
-      - name: run docker container
-        run: |
-          docker run assignment4
+      - name: copy code to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 95.216.216.139
+          username: haoyu25
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "."
+          target: "~/assignment4"
+
+      - name: run docker on server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 95.216.216.139
+          username: haoyu25
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd ~/assignment4
+            docker build -t assignment4 .
+            docker run --rm -v /opt/assignment_outputs:/app/data assignment4
